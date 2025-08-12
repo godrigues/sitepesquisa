@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Termo de Consentimento</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Termo de Consentimento</h1>
+        <p>
+            Ao prosseguir, você concorda em participar voluntariamente desta pesquisa. 
+            Suas respostas serão tratadas de forma anônima e confidencial e serão 
+            utilizadas exclusivamente para fins de pesquisa. Seus dados não serão 
+            compartilhados com terceiros e você poderá sair da pesquisa a qualquer 
+            momento.
+        </p>
+        <button id="consent-button">Concordo e Continuar</button>
+    </div>
+    <script>
+        document.getElementById("consent-button").addEventListener("click", function() {
+            window.location.href = 'user_info.html'; 
+        });
+    </script>
+</body>
+</html>
