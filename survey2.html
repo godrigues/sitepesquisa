@@ -15,7 +15,7 @@
             </video>
             </div>
         <form id="survey2-form">
-            <div class="question" data-question-id="V001">
+            <div class="question active" data-question-id="V001">
                 <h3>1. Qual a principal mudança que você observa no heatmap ao longo do tempo?</h3>
                 <div class="options">
                     <div class="option">
@@ -35,6 +35,7 @@
                         <label for="v001_opt4">Nenhuma mudança significativa</label>
                     </div>
                 </div>
+                <div class="question-message"></div>
             </div>
 
             <div class="question" data-question-id="V002">
@@ -57,29 +58,48 @@
                         <label for="v002_opt4">Varia constantemente</label>
                     </div>
                 </div>
+                <div class="question-message"></div>
             </div>
 
             <div class="question" data-question-id="V003">
                 <h3>3. Há alguma área que permanece "quente" (vermelha/laranja) durante a maior parte do tempo? Se sim, qual?</h3>
                 <textarea id="v003_text" name="V003"></textarea>
+                <div class="question-message"></div>
             </div>
 
             <div class="question" data-question-id="V004">
                 <h3>4. O que você acha que o heatmap está tentando representar ou medir?</h3>
                 <textarea id="v004_text" name="V004"></textarea>
+                <div class="question-message"></div>
             </div>
 
             <div class="question" data-question-id="V005">
                 <h3>5. Descreva a transição de cores que você observa no heatmap.</h3>
                 <textarea id="v005_text" name="V005"></textarea>
+                <div class="question-message"></div>
+            </div>
+
+            <div class="navigation-buttons">
+                <button type="button" id="prev-button" style="display:none;">Anterior</button>
+                <button type="button" id="next-button">Próxima</button>
             </div>
 
             <div class="submit-container">
-                <button type="submit">Enviar Respostas</button>
+                <button type="submit" id="submit-button" style="display:none;">Enviar Respostas</button>
             </div>
             <div id="message" class="message" style="display:none;"></div>
         </form>
+        <div id="progress-container">
+            <p>Questão <span id="current-question">1</span> de <span id="total-questions">X</span></p>
+        </div>
     </div>
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="loading-message">
+            <div class="spinner"></div>
+            <p>Enviando suas respostas...</p>
+        </div>
+    </div>
+
     <script src="script2.js"></script>
 </body>
 </html>

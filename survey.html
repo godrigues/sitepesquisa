@@ -13,7 +13,7 @@
             <img src="midia/map.jpg" alt="Imagem da Pesquisa" class="survey-image">
         </div>
         <form id="survey-form">
-            <div class="question" data-question-id="Q001">
+            <div class="question active" data-question-id="Q001">
                 <h3>1. Qual a cor predominante na área central da imagem?</h3>
                 <div class="options">
                     <div class="option">
@@ -33,6 +33,7 @@
                         <label for="q001_opt4">Amarelo</label>
                     </div>
                 </div>
+                <div class="question-message"></div>
             </div>
 
             <div class="question" data-question-id="Q002">
@@ -59,6 +60,7 @@
                         <label for="q002_opt5">Mais de 4</label>
                     </div>
                 </div>
+                <div class="question-message"></div>
             </div>
 
             <div class="question" data-question-id="Q003">
@@ -81,11 +83,13 @@
                         <label for="q003_opt4">Dados ausentes</label>
                     </div>
                 </div>
+                <div class="question-message"></div>
             </div>
 
             <div class="question" data-question-id="Q004">
                 <h3>4. Descreva em poucas palavras o que a imagem sugere a você.</h3>
                 <textarea id="q004_text" name="Q004"></textarea>
+                <div class="question-message"></div>
             </div>
 
             <div class="question" data-question-id="Q005">
@@ -108,15 +112,23 @@
                         <label for="q005_opt4">Todas iguais</label>
                     </div>
                 </div>
+                <div class="question-message"></div>
+            </div>
+
+            <div class="navigation-buttons">
+                <button type="button" id="prev-button">Anterior</button>
+                <button type="button" id="next-button">Próxima</button>
             </div>
 
             <div class="submit-container">
-                <button type="submit">Enviar Respostas</button>
+                <button type="submit" id="submit-button">Enviar Respostas</button>
             </div>
-            <div id="message" class="message" style="display:none;"></div>
+            <div id="message" class="message"></div>
         </form>
+        <div id="progress-container">
+            <p>Questão <span id="current-question">1</span> de <span id="total-questions">X</span></p>
+        </div>
     </div>
     <script src="survey.js"></script>
 </body>
 </html>
-

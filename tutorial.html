@@ -14,7 +14,7 @@
             <img src="midia/map.jpg" alt="Imagem do Tutorial" class="survey-image">
         </div>
         <form id="tutorial-form">
-            <div class="question" data-question-id="T001">
+            <div class="question active" data-question-id="T001">
                 <h3>1. Qual a cor predominante no mapa de calor do tutorial?</h3>
                 <div class="options">
                     <div class="option">
@@ -26,18 +26,28 @@
                         <label for="t001_opt2">Azul</label>
                     </div>
                 </div>
+                <div class="question-message"></div>
             </div>
             
             <div class="question" data-question-id="T002">
                 <h3>2. Descreva em uma palavra o que você entende do mapa de calor do tutorial.</h3>
                 <textarea id="t002_text" name="T002"></textarea>
+                <div class="question-message"></div>
+            </div>
+
+            <div class="navigation-buttons">
+                <button type="button" id="prev-button">Anterior</button>
+                <button type="button" id="next-button">Próxima</button>
             </div>
 
             <div class="submit-container">
-                <button type="submit">Concluir Tutorial</button>
+                <button type="submit" id="submit-button">Concluir Tutorial</button>
             </div>
-            <div id="message" class="message" style="display:none;"></div>
+            <div id="message" class="message"></div>
         </form>
+        <div id="progress-container">
+            <p>Questão <span id="current-question">1</span> de <span id="total-questions">X</span></p>
+        </div>
     </div>
     <script src="tutorial.js"></script>
 </body>
