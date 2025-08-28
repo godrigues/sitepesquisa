@@ -9,7 +9,6 @@ document.addEventListener("DOMContentLoaded", function() {
     
     const pageAnswers = [];
 
-
     function validateAnswer() {
         const currentQuestionDiv = questions[currentQuestionIndex];
         const questionId = currentQuestionDiv.dataset.questionId;
@@ -36,7 +35,6 @@ document.addEventListener("DOMContentLoaded", function() {
         return true;
     }
 
-
     function updateProgress() {
         const currentQuestionSpan = document.getElementById("current-question");
         const totalQuestionsSpan = document.getElementById("total-questions");
@@ -45,7 +43,6 @@ document.addEventListener("DOMContentLoaded", function() {
             totalQuestionsSpan.textContent = totalQuestions;
         }
     }
-
 
     function showQuestion(index) {
         questions.forEach((q, i) => {
@@ -78,7 +75,7 @@ document.addEventListener("DOMContentLoaded", function() {
             timestamp: new Date().toISOString()
         };
     }
-
+    
     if (tutorialForm) {
         updateProgress();
         showQuestion(currentQuestionIndex);
@@ -107,6 +104,7 @@ document.addEventListener("DOMContentLoaded", function() {
             collectAnswer();
 
             localStorage.setItem("tutorialAnswers", JSON.stringify(pageAnswers));
+            
             window.location.href = 'start_real_survey.html';
         });
     }

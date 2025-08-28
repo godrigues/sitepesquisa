@@ -3,18 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Começar Pesquisa</title>
+    <title>Início da Pesquisa Principal</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Hora de Começar!</h1>
-        <p>O tutorial foi concluído. Agora, você irá para as perguntas da pesquisa real.</p>
-        <button id="start-button">Iniciar a Pesquisa Real</button>
+    <div class="container welcome-container">
+        <h1>Pesquisa Principal</h1>
+        <p>Você concluiu o tutorial. Agora, prepare-se para a pesquisa principal.</p>
+        <button id="start-button">Iniciar Pesquisa</button>
     </div>
+
     <script>
-        document.getElementById("start-button").addEventListener("click", function() {
-            window.location.href = 'survey.html'; // Redireciona para a primeira página de pesquisa
+        document.getElementById("start-button").addEventListener("click", async function() {
+            const gasUrl = 'https://script.google.com/macros/s/AKfycbx_BSeYfATPGj4lzJImTnB8oyXCFRkznmfaHEbN7OscX-xEpfXG_9Vk8cz98USiD24SjA/exec';
+            
+            const startButton = document.getElementById("start-button");
+            startButton.textContent = "Carregando...";
+            startButton.disabled = true;
+
+            const postData = { action: 'getNextSurvey' };
+            const formData = new FormData();
+            formData.append('data', JSON.stringify(postData));
+
+            try {
+                const response = await fetch(gasUrl, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: formData,
+                });
+                
+                // Redirecionamento é feito de forma aleatória no cliente
+                const surveyPages = ['survey.html', 'survey1.html', 'survey2.html'];
+                const randomSurvey = surveyPages[Math.floor(Math.random() * surveyPages.length)];
+                window.location.href = randomSurvey;
+                
+            } catch (error) {
+                console.error('Erro ao conectar ao servidor:', error);
+                alert('Erro ao iniciar a pesquisa. Por favor, tente novamente.');
+            } finally {
+                startButton.textContent = "Iniciar Pesquisa";
+                startButton.disabled = false;
+            }
         });
     </script>
 </body>

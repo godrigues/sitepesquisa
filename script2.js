@@ -1,23 +1,17 @@
 document.addEventListener("DOMContentLoaded", function() {
-    const survey2Form = document.getElementById("survey2-form");
+    // O ID do formulário em cada página deve ser único
+    const surveyForm = document.getElementById("survey-form") || document.getElementById("survey1-form") || document.getElementById("survey2-form");
     const questions = document.querySelectorAll(".question[data-question-id]");
     const prevButton = document.getElementById("prev-button");
     const nextButton = document.getElementById("next-button");
     const submitButton = document.getElementById("submit-button");
     const totalQuestions = questions.length;
     let currentQuestionIndex = 0;
-
-    let messageDiv = document.getElementById("message");
-    if (!messageDiv) {
-        messageDiv = document.createElement("div");
-        messageDiv.id = "message";
-        messageDiv.className = "message";
-        survey2Form.parentElement.appendChild(messageDiv);
-    }
     
+    const pageAnswers = [];
     const loadingOverlay = document.getElementById("loading-overlay");
+    const messageDiv = document.getElementById("message");
 
- 
     function validateAnswer() {
         const currentQuestionDiv = questions[currentQuestionIndex];
         const questionId = currentQuestionDiv.dataset.questionId;
@@ -43,7 +37,6 @@ document.addEventListener("DOMContentLoaded", function() {
         }
         return true;
     }
-    
 
     function updateProgress() {
         const currentQuestionSpan = document.getElementById("current-question");
@@ -54,20 +47,16 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
-
     function showQuestion(index) {
         questions.forEach((q, i) => {
-            q.classList.remove('active');
+            q.classList.remove("active");
         });
-        questions[index].classList.add('active');
+        questions[index].classList.add("active");
         
-        prevButton.style.display = 'none';
-        nextButton.style.display = index === totalQuestions - 1 ? 'none' : 'block';
-        submitButton.style.display = index === totalQuestions - 1 ? 'block' : 'none';
+        prevButton.style.display = "none";
+        nextButton.style.display = index === totalQuestions - 1 ? "none" : "block";
+        submitButton.style.display = index === totalQuestions - 1 ? "block" : "none";
     }
-
-    const pageAnswers = [];
-    
 
     function collectAnswer() {
         const currentQuestionDiv = questions[currentQuestionIndex];
@@ -82,7 +71,7 @@ document.addEventListener("DOMContentLoaded", function() {
         } else if (currentQuestionDiv.querySelector("textarea")) {
             answer = currentQuestionDiv.querySelector("textarea").value.trim();
         }
-        
+
         pageAnswers[currentQuestionIndex] = {
             questionId: questionId,
             answer: answer,
@@ -90,7 +79,37 @@ document.addEventListener("DOMContentLoaded", function() {
         };
     }
 
-    if (survey2Form) {
+    async function sendDataToGAS(data) {
+        const gasUrl = "https://script.google.com/macros/s/AKfycbx_BSeYfATPGj4lzJImTnB8oyXCFRkznmfaHEbN7OscX-xEpfXG_9Vk8cz98USiD24SjA/exec";
+
+        loadingOverlay.classList.add("visible");
+
+        const formData = new FormData();
+        formData.append("data", JSON.stringify(data));
+
+        try {
+            await fetch(gasUrl, {
+                method: "POST",
+                mode: "no-cors", // Use no-cors para evitar problemas de CORS com FormData
+                body: formData,
+            });
+
+            await new Promise(resolve => setTimeout(resolve, 5000));
+            
+            loadingOverlay.classList.remove("visible");
+            localStorage.clear();
+            window.location.href = "thankyou.html";
+        } catch (error) {
+            console.error("Erro ao enviar as respostas:", error);
+            
+            loadingOverlay.classList.remove("visible");
+            messageDiv.textContent = "Ocorreu um erro ao enviar as respostas. Por favor, tente novamente.";
+            messageDiv.className = "message error";
+            messageDiv.style.display = "block";
+        }
+    }
+
+    if (surveyForm) {
         const userInfoString = localStorage.getItem("userInfo");
         if (!userInfoString) {
             alert("Informações do usuário não encontradas. Redirecionando para a página de identificação.");
@@ -98,16 +117,17 @@ document.addEventListener("DOMContentLoaded", function() {
             return;
         }
         const userInfo = JSON.parse(userInfoString);
-
+        
         updateProgress();
         showQuestion(currentQuestionIndex);
 
-        nextButton.addEventListener('click', function() {
+        nextButton.addEventListener("click", function() {
             if (!validateAnswer()) {
                 return;
             }
             
             collectAnswer();
+
             if (currentQuestionIndex < totalQuestions - 1) {
                 currentQuestionIndex++;
                 showQuestion(currentQuestionIndex);
@@ -115,100 +135,57 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         });
         
-        submitButton.addEventListener("click", async function(e) {
+        submitButton.addEventListener("click", function(e) {
             e.preventDefault();
             
             if (!validateAnswer()) {
                 return;
             }
 
-            loadingOverlay.classList.add('visible');
-
             collectAnswer();
 
             let allAnswers = [];
 
+            // 1. Adiciona as informações do perfil
             for (const key in userInfo) {
-                allAnswers.push({
-                    userId: userInfo.userId,
-                    questionId: key,
-                    answer: userInfo[key],
-                    timestamp: new Date().toISOString()
-                });
+                if (userInfo.hasOwnProperty(key)) {
+                    allAnswers.push({
+                        userId: userInfo.userId, // Garante que o userId esteja em cada item
+                        questionId: key,
+                        answer: userInfo[key],
+                        timestamp: userInfo.surveyStartTime 
+                    });
+                }
             }
 
+            // 2. Recupera e adiciona as respostas do tutorial
             const tutorialAnswersString = localStorage.getItem("tutorialAnswers");
             if (tutorialAnswersString) {
                 try {
                     const tutorialAnswers = JSON.parse(tutorialAnswersString);
-                    tutorialAnswers.forEach(answer => {
-                        allAnswers.push({
-                            userId: userInfo.userId,
-                            questionId: answer.questionId,
-                            answer: answer.answer,
-                            timestamp: answer.timestamp
-                        });
+                    // Adiciona o userId a cada resposta do tutorial
+                    tutorialAnswers.forEach(ans => {
+                        ans.userId = userInfo.userId;
                     });
+                    allAnswers = allAnswers.concat(tutorialAnswers);
                     localStorage.removeItem("tutorialAnswers");
                 } catch (e) {
                     console.error("Erro ao parsear respostas do tutorial do localStorage:", e);
                 }
             }
-
-            const survey1AnswersString = localStorage.getItem("survey1Answers");
-            if (survey1AnswersString) {
-                try {
-                    const survey1Answers = JSON.parse(survey1AnswersString);
-                    survey1Answers.forEach(answer => {
-                         allAnswers.push({
-                            userId: userInfo.userId,
-                            questionId: answer.questionId,
-                            answer: answer.answer,
-                            timestamp: answer.timestamp
-                        });
-                    });
-                    localStorage.removeItem("survey1Answers");
-                } catch (e) {
-                    console.error("Erro ao parsear respostas da survey1 do localStorage:", e);
-                }
-            }
             
-            pageAnswers.forEach(answer => {
-                allAnswers.push({
-                    userId: userInfo.userId,
-                    questionId: answer.questionId,
-                    answer: answer.answer,
-                    timestamp: answer.timestamp
-                });
+            // 3. Adiciona as respostas da página atual
+            // Adiciona o userId a cada resposta da página atual
+            pageAnswers.forEach(ans => {
+                ans.userId = userInfo.userId;
             });
-
+            allAnswers = allAnswers.concat(pageAnswers);
+            
             const validAnswers = allAnswers.filter(answer => answer.answer.trim() !== "");
 
-            const gasUrl = 'https://script.google.com/macros/s/AKfycbx_BSeYfATPGj4lzJImTnB8oyXCFRkznmfaHEbN7OscX-xEpfXG_9Vk8cz98USiD24SjA/exec';
-            
-            const formData = new FormData();
-            formData.append('data', JSON.stringify(validAnswers));
-
-            try {
-                await fetch(gasUrl, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    body: formData,
-                });
-
-                await new Promise(resolve => setTimeout(resolve, 5000));
-                
-                loadingOverlay.classList.remove('visible');
-                localStorage.clear();
-                window.location.href = 'thankyou.html';
-            } catch (error) {
-                console.error('Erro ao enviar as respostas:', error);
-                
-                loadingOverlay.classList.remove('visible');
-                messageDiv.textContent = "Ocorreu um erro ao enviar as respostas. Por favor, tente novamente.";
-                messageDiv.className = "message error";
-                messageDiv.style.display = "block";
-            }
+            sendDataToGAS(validAnswers);
         });
     }
 });
+
+

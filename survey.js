@@ -1,6 +1,5 @@
-// survey.js
 document.addEventListener("DOMContentLoaded", function() {
-    const surveyForm = document.getElementById("survey-form");
+    const surveyForm = document.getElementById("survey-form") || document.getElementById("survey1-form") || document.getElementById("survey2-form");
     const questions = document.querySelectorAll(".question[data-question-id]");
     const prevButton = document.getElementById("prev-button");
     const nextButton = document.getElementById("next-button");
@@ -9,8 +8,9 @@ document.addEventListener("DOMContentLoaded", function() {
     let currentQuestionIndex = 0;
     
     const pageAnswers = [];
+    const loadingOverlay = document.getElementById("loading-overlay");
+    const messageDiv = document.getElementById("message");
 
-    // Função para validar a resposta da pergunta ativa
     function validateAnswer() {
         const currentQuestionDiv = questions[currentQuestionIndex];
         const questionId = currentQuestionDiv.dataset.questionId;
@@ -37,7 +37,6 @@ document.addEventListener("DOMContentLoaded", function() {
         return true;
     }
 
-    // Função para atualizar o contador de progresso
     function updateProgress() {
         const currentQuestionSpan = document.getElementById("current-question");
         const totalQuestionsSpan = document.getElementById("total-questions");
@@ -47,19 +46,17 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
-    // Função para mostrar a pergunta atual e esconder as outras
     function showQuestion(index) {
         questions.forEach((q, i) => {
-            q.classList.remove('active');
+            q.classList.remove("active");
         });
-        questions[index].classList.add('active');
+        questions[index].classList.add("active");
         
-        prevButton.style.display = 'none';
-        nextButton.style.display = index === totalQuestions - 1 ? 'none' : 'block';
-        submitButton.style.display = index === totalQuestions - 1 ? 'block' : 'none';
+        prevButton.style.display = "none";
+        nextButton.style.display = index === totalQuestions - 1 ? "none" : "block";
+        submitButton.style.display = index === totalQuestions - 1 ? "block" : "none";
     }
 
-    // Função para coletar a resposta da pergunta ativa
     function collectAnswer() {
         const currentQuestionDiv = questions[currentQuestionIndex];
         const questionId = currentQuestionDiv.dataset.questionId;
@@ -81,6 +78,36 @@ document.addEventListener("DOMContentLoaded", function() {
         };
     }
 
+    async function sendDataToGAS(data) {
+        const gasUrl = "https://script.google.com/macros/s/AKfycbx_BSeYfATPGj4lzJImTnB8oyXCFRkznmfaHEbN7OscX-xEpfXG_9Vk8cz98USiD24SjA/exec";
+
+        loadingOverlay.classList.add("visible");
+
+        const formData = new FormData();
+        formData.append("data", JSON.stringify(data));
+
+        try {
+            await fetch(gasUrl, {
+                method: "POST",
+                mode: "no-cors",
+                body: formData,
+            });
+
+            await new Promise(resolve => setTimeout(resolve, 5000));
+            
+            loadingOverlay.classList.remove("visible");
+            localStorage.clear();
+            window.location.href = "thankyou.html";
+        } catch (error) {
+            console.error("Erro ao enviar as respostas:", error);
+            
+            loadingOverlay.classList.remove("visible");
+            messageDiv.textContent = "Ocorreu um erro ao enviar as respostas. Por favor, tente novamente.";
+            messageDiv.className = "message error";
+            messageDiv.style.display = "block";
+        }
+    }
+
     if (surveyForm) {
         const userInfoString = localStorage.getItem("userInfo");
         if (!userInfoString) {
@@ -89,12 +116,11 @@ document.addEventListener("DOMContentLoaded", function() {
             return;
         }
         const userInfo = JSON.parse(userInfoString);
-        const userId = userInfo.userId;
         
         updateProgress();
         showQuestion(currentQuestionIndex);
 
-        nextButton.addEventListener('click', function() {
+        nextButton.addEventListener("click", function() {
             if (!validateAnswer()) {
                 return;
             }
@@ -114,15 +140,46 @@ document.addEventListener("DOMContentLoaded", function() {
             if (!validateAnswer()) {
                 return;
             }
-            
-            collectAnswer();
-            
-            pageAnswers.forEach(answer => {
-                answer.userId = userId;
-            });
 
-            localStorage.setItem("survey1Answers", JSON.stringify(pageAnswers));
-            window.location.href = 'survey2.html';
+            collectAnswer();
+
+            let allAnswers = [];
+
+            for (const key in userInfo) {
+                if (userInfo.hasOwnProperty(key)) {
+                    allAnswers.push({
+                        userId: userInfo.userId,
+                        questionId: key,
+                        answer: userInfo[key],
+                        timestamp: userInfo.surveyStartTime
+                    });
+                }
+            }
+
+            const tutorialAnswersString = localStorage.getItem("tutorialAnswers");
+            if (tutorialAnswersString) {
+                try {
+                    const tutorialAnswers = JSON.parse(tutorialAnswersString);
+                    tutorialAnswers.forEach(ans => {
+                        ans.userId = userInfo.userId;
+                    });
+                    allAnswers = allAnswers.concat(tutorialAnswers);
+                    localStorage.removeItem("tutorialAnswers");
+                } catch (e) {
+                    console.error("Erro ao parsear respostas do tutorial do localStorage:", e);
+                }
+            }
+
+            pageAnswers.forEach(ans => {
+                ans.userId = userInfo.userId;
+            });
+            allAnswers = allAnswers.concat(pageAnswers);
+            
+            const validAnswers = allAnswers.filter(answer => answer.answer.trim() !== "");
+
+            sendDataToGAS(validAnswers);
         });
     }
 });
+
+
