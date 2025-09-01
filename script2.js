@@ -12,9 +12,6 @@ document.addEventListener("DOMContentLoaded", function() {
     const loadingOverlay = document.getElementById("loading-overlay");
     const messageDiv = document.getElementById("message");
 
-    // Obter o nome do arquivo HTML atual (ex: survey.html, survey1.html, survey2.html)
-    const currentSurveyName = window.location.pathname.split("/").pop();
-
     function validateAnswer() {
         const currentQuestionDiv = questions[currentQuestionIndex];
         const questionId = currentQuestionDiv.dataset.questionId;
@@ -82,28 +79,20 @@ document.addEventListener("DOMContentLoaded", function() {
         };
     }
 
-    async function sendDataToGAS(data, actionType = "saveData") {
+    async function sendDataToGAS(data) {
         const gasUrl = "https://script.google.com/macros/s/AKfycbx_BSeYfATPGj4lzJImTnB8oyXCFRkznmfaHEbN7OscX-xEpfXG_9Vk8cz98USiD24SjA/exec";
 
         loadingOverlay.classList.add("visible");
 
         const formData = new FormData();
-        formData.append("data", JSON.stringify({ action: actionType, payload: data }));
+        formData.append("data", JSON.stringify(data));
 
         try {
-            const response = await fetch(gasUrl, {
+            await fetch(gasUrl, {
                 method: "POST",
                 mode: "no-cors", // Use no-cors para evitar problemas de CORS com FormData
                 body: formData,
             });
-
-            // Não é possível ler a resposta de uma requisição no-cors, mas podemos assumir sucesso
-            // se não houver erro na rede.
-            
-            // Se a ação for para salvar dados, incrementa o contador após o envio bem-sucedido
-            if (actionType === "saveData") {
-                await incrementCounterGAS(currentSurveyName);
-            }
 
             await new Promise(resolve => setTimeout(resolve, 5000));
             
@@ -117,23 +106,6 @@ document.addEventListener("DOMContentLoaded", function() {
             messageDiv.textContent = "Ocorreu um erro ao enviar as respostas. Por favor, tente novamente.";
             messageDiv.className = "message error";
             messageDiv.style.display = "block";
-        }
-    }
-
-    async function incrementCounterGAS(surveyName) {
-        const gasUrl = "https://script.google.com/macros/s/AKfycbx_BSeYfATPGj4lzJImTnB8oyXCFRkznmfaHEbN7OscX-xEpfXG_9Vk8cz98USiD24SjA/exec";
-        const formData = new FormData();
-        formData.append("data", JSON.stringify({ action: "incrementCounter", surveyName: surveyName }));
-
-        try {
-            await fetch(gasUrl, {
-                method: "POST",
-                mode: "no-cors",
-                body: formData,
-            });
-            console.log("Contador incrementado para: ", surveyName);
-        } catch (error) {
-            console.error("Erro ao incrementar o contador:", error);
         }
     }
 
@@ -175,14 +147,13 @@ document.addEventListener("DOMContentLoaded", function() {
             let allAnswers = [];
 
             // 1. Adiciona as informações do perfil
-            // Transforma o objeto userInfo em um array de objetos de resposta
             for (const key in userInfo) {
                 if (userInfo.hasOwnProperty(key)) {
                     allAnswers.push({
                         userId: userInfo.userId, // Garante que o userId esteja em cada item
                         questionId: key,
                         answer: userInfo[key],
-                        timestamp: userInfo.surveyStartTime // Ou um timestamp específico para cada campo, se necessário
+                        timestamp: userInfo.surveyStartTime 
                     });
                 }
             }
@@ -212,7 +183,7 @@ document.addEventListener("DOMContentLoaded", function() {
             
             const validAnswers = allAnswers.filter(answer => answer.answer.trim() !== "");
 
-            sendDataToGAS(validAnswers, "saveData");
+            sendDataToGAS(validAnswers);
         });
     }
 });

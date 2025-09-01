@@ -10,7 +10,6 @@
     <div class="container welcome-container">
         <h1>Pesquisa Principal</h1>
         <p>Você concluiu o tutorial. Agora, prepare-se para a pesquisa principal.</p>
-        <p>A pesquisa será dividida em três partes.</p>
         <button id="start-button">Iniciar Pesquisa</button>
     </div>
 
@@ -32,6 +31,8 @@
                     mode: 'no-cors',
                     body: formData,
                 });
+                
+                // Redirecionamento é feito de forma aleatória no cliente
                 const surveyPages = ['survey.html', 'survey1.html', 'survey2.html'];
                 const randomSurvey = surveyPages[Math.floor(Math.random() * surveyPages.length)];
                 window.location.href = randomSurvey;
