@@ -10,37 +10,24 @@
     <div class="container welcome-container">
         <h1>Pesquisa Principal</h1>
         <p>Você concluiu o tutorial. Agora, prepare-se para a pesquisa principal.</p>
+        <p>A pesquisa será dividida em três partes.</p>
         <button id="start-button">Iniciar Pesquisa</button>
     </div>
 
     <script>
         document.getElementById("start-button").addEventListener("click", async function() {
-            const gasUrl = 'https://script.google.com/macros/s/AKfycbx_BSeYfATPGj4lzJImTnB8oyXCFRkznmfaHEbN7OscX-xEpfXG_9Vk8cz98USiD24SjA/exec';
+            const gasWebAppLink = 'https://script.google.com/macros/s/AKfycbx_BSeYfATPGj4lzJImTnB8oyXCFRkznmfaHEbN7OscX-xEpfXG_9Vk8cz98USiD24SjA/exec';
             
             const startButton = document.getElementById("start-button");
             startButton.textContent = "Carregando...";
             startButton.disabled = true;
 
-            const postData = { action: 'getNextSurvey' };
-            const formData = new FormData();
-            formData.append('data', JSON.stringify(postData));
-
             try {
-                const response = await fetch(gasUrl, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    body: formData,
-                });
-                
-                // Redirecionamento é feito de forma aleatória no cliente
-                const surveyPages = ['survey.html', 'survey1.html', 'survey2.html'];
-                const randomSurvey = surveyPages[Math.floor(Math.random() * surveyPages.length)];
-                window.location.href = randomSurvey;
+                window.location.href = gasWebAppLink + '?action=getNextSurvey';
                 
             } catch (error) {
-                console.error('Erro ao conectar ao servidor:', error);
-                alert('Erro ao iniciar a pesquisa. Por favor, tente novamente.');
-            } finally {
+                console.error("Erro ao iniciar a pesquisa:", error);
+                alert("Erro ao iniciar a pesquisa. Por favor, tente novamente.");
                 startButton.textContent = "Iniciar Pesquisa";
                 startButton.disabled = false;
             }
