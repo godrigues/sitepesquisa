@@ -1,4 +1,3 @@
-// Este código deve ser usado para survey.js, survey1.js e script2.js
 document.addEventListener("DOMContentLoaded", function() {
     // O ID do formulário em cada página deve ser único
     const surveyForm = document.getElementById("survey-form") || document.getElementById("survey1-form") || document.getElementById("survey2-form");
@@ -217,5 +216,3 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 });
-
-
