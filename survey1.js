@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", function() {
+    // O ID do formulário em cada página deve ser único
     const surveyForm = document.getElementById("survey-form") || document.getElementById("survey1-form") || document.getElementById("survey2-form");
     const questions = document.querySelectorAll(".question[data-question-id]");
     const prevButton = document.getElementById("prev-button");
@@ -89,9 +90,25 @@ document.addEventListener("DOMContentLoaded", function() {
         try {
             await fetch(gasUrl, {
                 method: "POST",
-                mode: "no-cors",
+                mode: "no-cors", // Use no-cors para evitar problemas de CORS com FormData
                 body: formData,
             });
+
+            // Incrementa o contador da pesquisa selecionada
+            const selectedSurvey = localStorage.getItem('selectedSurvey');
+            if (selectedSurvey) {
+                const counterData = new FormData();
+                counterData.append("data", JSON.stringify({
+                    action: 'incrementCounter',
+                    surveyName: selectedSurvey
+                }));
+                
+                await fetch(gasUrl, {
+                    method: "POST",
+                    mode: "no-cors",
+                    body: counterData,
+                });
+            }
 
             await new Promise(resolve => setTimeout(resolve, 5000));
             
@@ -145,21 +162,24 @@ document.addEventListener("DOMContentLoaded", function() {
 
             let allAnswers = [];
 
+            // 1. Adiciona as informações do perfil
             for (const key in userInfo) {
                 if (userInfo.hasOwnProperty(key)) {
                     allAnswers.push({
-                        userId: userInfo.userId,
+                        userId: userInfo.userId, // Garante que o userId esteja em cada item
                         questionId: key,
                         answer: userInfo[key],
-                        timestamp: userInfo.surveyStartTime
+                        timestamp: userInfo.surveyStartTime 
                     });
                 }
             }
 
+            // 2. Recupera e adiciona as respostas do tutorial
             const tutorialAnswersString = localStorage.getItem("tutorialAnswers");
             if (tutorialAnswersString) {
                 try {
                     const tutorialAnswers = JSON.parse(tutorialAnswersString);
+                    // Adiciona o userId a cada resposta do tutorial
                     tutorialAnswers.forEach(ans => {
                         ans.userId = userInfo.userId;
                     });
@@ -170,6 +190,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
             }
             
+            // 3. Adiciona as respostas da página atual
+            // Adiciona o userId a cada resposta da página atual
             pageAnswers.forEach(ans => {
                 ans.userId = userInfo.userId;
             });

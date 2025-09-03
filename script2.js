@@ -94,6 +94,22 @@ document.addEventListener("DOMContentLoaded", function() {
                 body: formData,
             });
 
+            // Incrementa o contador da pesquisa selecionada
+            const selectedSurvey = localStorage.getItem('selectedSurvey');
+            if (selectedSurvey) {
+                const counterData = new FormData();
+                counterData.append("data", JSON.stringify({
+                    action: 'incrementCounter',
+                    surveyName: selectedSurvey
+                }));
+                
+                await fetch(gasUrl, {
+                    method: "POST",
+                    mode: "no-cors",
+                    body: counterData,
+                });
+            }
+
             await new Promise(resolve => setTimeout(resolve, 5000));
             
             loadingOverlay.classList.remove("visible");

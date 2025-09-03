@@ -1,0 +1,131 @@
+// Code.gs
+function doGet(e) {
+  // Adiciona suporte para requisições GET para obter a próxima pesquisa
+  if (e.parameter.action === 'getNextSurvey') {
+    var result = getNextSurvey();
+    return ContentService.createTextOutput(JSON.stringify(result))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+  
+  // Retorna uma resposta padrão para outras requisições GET
+  return ContentService.createTextOutput(JSON.stringify({ 'status': 'ok' }))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+function getNextSurvey() {
+  var sheetId = '1r7k0pxjodyZWWS6B0iKVTd3tktreF6C3KWxW5MhjXEc';
+  var sheetName = 'Contador';
+  var sheet = SpreadsheetApp.openById(sheetId).getSheetByName(sheetName);
+
+  if (!sheet) {
+    return { status: 'error', message: 'Contador sheet not found' };
+  }
+
+  var surveys = ['survey.html', 'survey1.html', 'survey2.html'];
+  var surveyCounts = [];
+
+  for (var i = 0; i < surveys.length; i++) {
+    var count = sheet.getRange(i + 2, 2).getValue() || 0;
+    surveyCounts.push(count);
+  }
+
+  var minCount = Math.min.apply(null, surveyCounts);
+  var surveysWithMinCount = [];
+  for (var i = 0; i < surveyCounts.length; i++) {
+    if (surveyCounts[i] === minCount) {
+      surveysWithMinCount.push(surveys[i]);
+    }
+  }
+
+  var nextSurvey = surveysWithMinCount[Math.floor(Math.random() * surveysWithMinCount.length)];
+  
+  return { nextSurvey: nextSurvey, status: 'success' };
+}
+
+function incrementSurveyCounter(surveyName) {
+  var sheetId = '1r7k0pxjodyZWWS6B0iKVTd3tktreF6C3KWxW5MhjXEc';
+  var sheetName = 'Contador';
+  var sheet = SpreadsheetApp.openById(sheetId).getSheetByName(sheetName);
+
+  if (!sheet) {
+    return { status: 'error', message: 'Contador sheet not found' };
+  }
+
+  var surveys = ['survey.html', 'survey1.html', 'survey2.html'];
+  var nextSurveyIndex = surveys.indexOf(surveyName);
+
+  if (nextSurveyIndex === -1) {
+    return { status: 'error', message: 'Survey name not found in list' };
+  }
+
+  var currentCount = sheet.getRange(nextSurveyIndex + 2, 2).getValue() || 0;
+  sheet.getRange(nextSurveyIndex + 2, 2).setValue(currentCount + 1);
+
+  return { status: 'success', message: 'Counter incremented for ' + surveyName };
+}
+
+function doPost(e) {
+  var sheetId = '1r7k0pxjodyZWWS6B0iKVTd3tktreF6C3KWxW5MhjXEc';
+  var sheetName = 'Respostas';
+  var sheet = SpreadsheetApp.openById(sheetId).getSheetByName(sheetName);
+
+  // Verifica se a planilha de respostas existe
+  if (!sheet) {
+    return ContentService.createTextOutput(JSON.stringify({ 'status': 'error', 'message': 'Respostas sheet not found' })).setMimeType(ContentService.MimeType.JSON);
+  }
+  
+  var rawData = e.parameter.data; // Dados enviados via FormData
+  
+  if (!rawData) {
+    return ContentService.createTextOutput(JSON.stringify({ 'status': 'error', 'message': 'No data received from frontend' })).setMimeType(ContentService.MimeType.JSON);
+  }
+  
+  var data;
+  try {
+    data = JSON.parse(rawData);
+  } catch (err) {
+    return ContentService.createTextOutput(JSON.stringify({ 'status': 'error', 'message': 'Failed to parse JSON data: ' + err.message + ' Raw data: ' + rawData })).setMimeType(ContentService.MimeType.JSON);
+  }
+  
+  // Se a ação for para incrementar o contador
+  if (data.action === 'incrementCounter') {
+    var result = incrementSurveyCounter(data.surveyName);
+    return ContentService.createTextOutput(JSON.stringify(result)).setMimeType(ContentService.MimeType.JSON);
+  }
+
+  // Se a ação for para obter o próximo survey
+  if (data.action === 'getNextSurvey') {
+    var result = getNextSurvey();
+    return ContentService.createTextOutput(JSON.stringify(result)).setMimeType(ContentService.MimeType.JSON);
+  }
+
+  // Se a primeira linha estiver vazia, adiciona os cabeçalhos
+  if (sheet.getLastRow() === 0) {
+    sheet.appendRow(['Timestamp', 'User ID', 'Question ID', 'Answer']);
+  }
+  
+  var rows = [];
+  
+  // A `data` deve ser um array de objetos, cada um representando uma resposta
+  if (Array.isArray(data)) {
+    data.forEach(function(item) {
+      // Garante que o item e suas propriedades existam antes de acessá-las
+      if (item && item.timestamp && item.userId && item.questionId && item.answer) {
+        rows.push([new Date(item.timestamp), item.userId, item.questionId, item.answer]);
+      }
+    });
+  } else {
+    // Caso a `data` não seja um array (erro na formatação do frontend), tenta salvar como um único item
+    if (data && data.timestamp && data.userId && data.questionId && data.answer) {
+      rows.push([new Date(data.timestamp), data.userId, data.questionId, data.answer]);
+    }
+  }
+
+  // Adiciona as linhas à planilha se houver dados válidos
+  if (rows.length > 0) {
+    sheet.getRange(sheet.getLastRow() + 1, 1, rows.length, rows[0].length).setValues(rows);
+  }
+
+  return ContentService.createTextOutput(JSON.stringify({ 'status': 'success', 'received_rows': rows.length })).setMimeType(ContentService.MimeType.JSON);
+}
+

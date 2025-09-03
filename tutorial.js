@@ -1,3 +1,5 @@
+// tutorial.js
+// Script para a página de tutorial
 document.addEventListener("DOMContentLoaded", function() {
     const tutorialForm = document.getElementById("tutorial-form");
     const questions = document.querySelectorAll(".question[data-question-id]");
