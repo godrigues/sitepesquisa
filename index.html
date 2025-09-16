@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Início da Pesquisa</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="accordion-item">
+            <h3 class="accordion-title ">Termo de Consentimento<span class="accordion-icon">-</span></h3>
+            <div class="accordion-content ">
+                <div class="scrollable-content">
+                    <p>
+                        Este projeto respeita integralmente a Resolução 466/12 do Conselho Nacional de Saúde. Todos
+                        os participantes serão devidamente esclarecidos sobre os objetivos da pesquisa,
+                        procedimentos, riscos e direitos, por meio do Termo de Consentimento Livre e
+                        Esclarecido (TCLE), antes do início das atividades. Não haverá qualquer forma
+                        de coerção ou indução à participação.
+                    </p>
+                
+                    <div class="accordion-item sub-accordion-item">
+                        <h3 class="accordion-title">Riscos<span class="accordion-icon">+</span></h3>
+                        <div class="accordion-content hidden">
+                            <p>
+                                Podem ocorrer situações, durante o estudo, em que o indivíduo se sinta constrangido
+                                por não saber manusear o sistema ou por não saber a resposta para uma pergunta
+                                proposta. No entanto, não serão pressionados a se expressar, podendo optar por
+                                não responder a qualquer momento. Além disso, terão total liberdade para
+                                utilizar o sistema no seu próprio ritmo, escolhendo o momento e o tempo que
+                                julgarem necessário para concluir as atividades.
+                            </p>
+                        </div>
+                    </div>
+    
+                    <div class="accordion-item sub-accordion-item">
+                        <h3 class="accordion-title">Benefícios<span class="accordion-icon">+</span></h3>
+                        <div class="accordion-content hidden">
+                            <p>
+                                Ao participar do experimento, os voluntários terão a oportunidade de explorar
+                                diferentes técnicas de visualização de dados espaço-temporais, o que pode
+                                ampliar sua capacidade de interpretar informações complexas em gráficos
+                                dinâmicos. A experiência também pode contribuir para o desenvolvimento do
+                                letramento visual e da análise crítica de representações visuais.
+                            </p>
+                            <p>
+                                Além disso, o estudo contribuirá para a área de Visualização de Dados ao gerar evidências empíricas sobre os
+                                pontos fortes e fracos de três modalidades visuais distintas. Esses resultados
+                                poderão orientar o desenvolvimento de ferramentas mais eficazes e acessíveis
+                                para diferentes perfis de usuários, com potencial aplicação em áreas como
+                                epidemiologia, climatologia e segurança pública.
+                            </p>
+                        </div>
+                    </div>
+    
+                    <div class="accordion-item sub-accordion-item">
+                        <h3 class="accordion-title">Armazenamento dos dados coletados<span class="accordion-icon">+</span></h3>
+                        <div class="accordion-content hidden">
+                            <p>
+                                Os dados coletados (respostas ao questionário) nesta pesquisa ficarão armazenados em computador
+                                pessoal, sob a responsabilidade da pesquisadora Ana Carla de Carvalho Correia,
+                                no endereço Centro de Informática (CIn) da UFPE Av. Jornalista Aníbal Fernandes,
+                                s/n - Cidade Universitária (Campus Recife) - CEP: 50.740-560, pelo período
+                                mínimo de 5 anos. Os dados coletados serão anonimizados para publicações e
+                                divulgação de resultados. Nenhum dado sensível será coletado.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h1>Identificação e Perfil</h1>
+        <form id="user-info-form">
+            <label for="gender">Gênero:</label>
+            <select id="gender" name="gender" required>
+                <option value="" disabled selected>Selecione...</option>
+                <option value="Masculino">Masculino</option>
+                <option value="Feminino">Feminino</option>
+                <option value="Outro">Outro</option>
+                <option value="Prefiro não dizer">Prefiro não dizer</option>
+            </select>
+
+            <label for="age">Idade:</label>
+            <input type="number" id="age" name="age" required>
+
+            <label for="education">Nível de Escolaridade:</label>
+            <select id="education" name="education" required>
+                <option value="" disabled selected>Selecione...</option>
+                <option value="Ensino fundamental">Ensino fundamental</option>
+                <option value="Ensino médio">Ensino médio</option>
+                <option value="Graduação">Graduação</option>
+                <option value="Pós-graduação">Pós-graduação</option>
+                <option value="Doutorado">Doutorado</option>
+                <option value="Outro">Outro</option>
+            </select>
+
+            <label for="experience">Experiência com visualização de dados:</label>
+            <select id="experience" name="experience" required>
+                <option value="" disabled selected>Selecione...</option>
+                <option value="Nenhuma">Nenhuma</option>
+                <option value="Básica">Básica</option>
+                <option value="Intermediária">Intermediária</option>
+                <option value="Avançada">Avançada</option>
+            </select>
+
+            <button type="submit">Salvar e Continuar</button>
+        </form>
+    </div>
+    <script src="index.js"></script>
+</body>
+</html>
