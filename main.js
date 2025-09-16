@@ -1,12 +1,16 @@
 document.addEventListener("DOMContentLoaded", function() {
-    // O ID do formulário em cada página deve ser único
-    const surveyForm = document.getElementById("survey-form") || document.getElementById("survey1-form") || document.getElementById("survey2-form");
+    const surveyForm = document.querySelector("form");
+    if (!surveyForm) {
+        return;
+    }
+
     const questions = document.querySelectorAll(".question[data-question-id]");
-    const prevButton = document.getElementById("prev-button");
     const nextButton = document.getElementById("next-button");
     const submitButton = document.getElementById("submit-button");
     const totalQuestions = questions.length;
     let currentQuestionIndex = 0;
+    
+    let questionStartTime = 0;
     
     const pageAnswers = [];
     const loadingOverlay = document.getElementById("loading-overlay");
@@ -53,9 +57,13 @@ document.addEventListener("DOMContentLoaded", function() {
         });
         questions[index].classList.add("active");
         
-        prevButton.style.display = "none";
-        nextButton.style.display = index === totalQuestions - 1 ? "none" : "block";
-        submitButton.style.display = index === totalQuestions - 1 ? "block" : "none";
+        questionStartTime = new Date().getTime();
+        
+        if (nextButton) nextButton.style.display = index === totalQuestions - 1 ? "none" : "block";
+        if (submitButton) submitButton.style.display = index === totalQuestions - 1 ? "block" : "none";
+        
+        const prevButton = document.getElementById("prev-button");
+        if (prevButton) prevButton.style.display = "none";
     }
 
     function collectAnswer() {
@@ -71,11 +79,14 @@ document.addEventListener("DOMContentLoaded", function() {
         } else if (currentQuestionDiv.querySelector("textarea")) {
             answer = currentQuestionDiv.querySelector("textarea").value.trim();
         }
+        
+        const responseTime = new Date().getTime() - questionStartTime;
 
         pageAnswers[currentQuestionIndex] = {
             questionId: questionId,
             answer: answer,
-            timestamp: new Date().toISOString()
+            timestamp: new Date().toISOString(),
+            responseTime: responseTime
         };
     }
 
@@ -90,11 +101,10 @@ document.addEventListener("DOMContentLoaded", function() {
         try {
             await fetch(gasUrl, {
                 method: "POST",
-                mode: "no-cors", // Use no-cors para evitar problemas de CORS com FormData
+                mode: "no-cors",
                 body: formData,
             });
-
-            // Incrementa o contador da pesquisa selecionada
+            
             const selectedSurvey = localStorage.getItem('selectedSurvey');
             if (selectedSurvey) {
                 const counterData = new FormData();
@@ -124,19 +134,38 @@ document.addEventListener("DOMContentLoaded", function() {
             messageDiv.style.display = "block";
         }
     }
+    
+    function updateProgress() {
+    const currentQuestionSpan = document.getElementById("current-question");
+    const totalQuestionsSpan = document.getElementById("total-questions");
+    if (currentQuestionSpan && totalQuestionsSpan) {
+        currentQuestionSpan.textContent = (currentQuestionIndex + 1);
+        totalQuestionsSpan.textContent = totalQuestions;
+    }
+    
+    // Atualiza a barra de progresso
+    const progressBar = document.querySelector(".progress-bar");
+    if (progressBar) {
+        const progressPercentage = ((currentQuestionIndex + 1) / totalQuestions) * 100;
+        progressBar.style.width = progressPercentage + "%";
+    }
+    }
 
-    if (surveyForm) {
-        const userInfoString = localStorage.getItem("userInfo");
-        if (!userInfoString) {
-            alert("Informações do usuário não encontradas. Redirecionando para a página de identificação.");
-            window.location.href = "user_info.html";
-            return;
-        }
-        const userInfo = JSON.parse(userInfoString);
-        
-        updateProgress();
-        showQuestion(currentQuestionIndex);
+    // Início da lógica da pesquisa
+    const userInfoString = localStorage.getItem("userInfo");
+    if (!userInfoString) {
+        alert("Informações do usuário não encontradas. Redirecionando para a página de identificação.");
+        window.location.href = "user_info.html";
+        return;
+    }
+    const userInfo = JSON.parse(userInfoString);
+    
+    const surveyId = window.location.pathname.split('/').pop();
+    
+    updateProgress();
+    showQuestion(currentQuestionIndex);
 
+    if (nextButton) {
         nextButton.addEventListener("click", function() {
             if (!validateAnswer()) {
                 return;
@@ -150,7 +179,9 @@ document.addEventListener("DOMContentLoaded", function() {
                 updateProgress();
             }
         });
-        
+    }
+
+    if (submitButton) {
         submitButton.addEventListener("click", function(e) {
             e.preventDefault();
             
@@ -166,10 +197,12 @@ document.addEventListener("DOMContentLoaded", function() {
             for (const key in userInfo) {
                 if (userInfo.hasOwnProperty(key)) {
                     allAnswers.push({
-                        userId: userInfo.userId, // Garante que o userId esteja em cada item
+                        userId: userInfo.userId,
                         questionId: key,
                         answer: userInfo[key],
-                        timestamp: userInfo.surveyStartTime 
+                        timestamp: userInfo.surveyStartTime,
+                        surveyId: surveyId, // Adiciona o ID da pesquisa
+                        responseTime: null // Não se aplica, então é nulo
                     });
                 }
             }
@@ -179,9 +212,9 @@ document.addEventListener("DOMContentLoaded", function() {
             if (tutorialAnswersString) {
                 try {
                     const tutorialAnswers = JSON.parse(tutorialAnswersString);
-                    // Adiciona o userId a cada resposta do tutorial
                     tutorialAnswers.forEach(ans => {
                         ans.userId = userInfo.userId;
+                        ans.surveyId = "tutorial.html"; // Identifica a pesquisa do tutorial
                     });
                     allAnswers = allAnswers.concat(tutorialAnswers);
                     localStorage.removeItem("tutorialAnswers");
@@ -191,9 +224,9 @@ document.addEventListener("DOMContentLoaded", function() {
             }
             
             // 3. Adiciona as respostas da página atual
-            // Adiciona o userId a cada resposta da página atual
             pageAnswers.forEach(ans => {
                 ans.userId = userInfo.userId;
+                ans.surveyId = surveyId;
             });
             allAnswers = allAnswers.concat(pageAnswers);
             

@@ -10,146 +10,156 @@
     <div class="container survey-container">
         <h1>Pesquisa: Análise da Imagem</h1>
         <p>Observe a imagem abaixo e responda às perguntas a seguir.</p>
-        <div class="image-container">
-            <img src="midia/exemplo2.jpg" alt="Mapa de Calor da América do Sul" class="survey-image">
+
+        <div class="main-content-container">
+            <div class="media-column">
+                <div class="image-container">
+                    <img src="midia/exemplo2.jpg" alt="Mapa de Calor da América do Sul" class="survey-image">
+                </div>
+            </div>
+
+            <div class="form-column">
+                <form id="survey1-form">
+                    <div class="question active" data-question-id="Survey101">
+                        <h3>1. Qual a região com a maior concentração de 'pontos quentes' (áreas vermelhas) na imagem?</h3>
+                        <div class="options">
+                            <div class="option">
+                                <input type="radio" id="i001_opt1" name="Survey101" value="Norte da América do Sul (Amazônia)">
+                                <label for="i001_opt1">Norte da América do Sul (Amazônia)</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="i001_opt2" name="Survey101" value="Região Andina">
+                                <label for="i001_opt2">Região Andina</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="i001_opt3" name="Survey101" value="Sul do Brasil e países vizinhos">
+                                <label for="i001_opt3">Sul do Brasil e países vizinhos</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="i001_opt4" name="Survey101" value="Litoral Atlântico">
+                                <label for="i001_opt4">Litoral Atlântico</label>
+                            </div>
+                        </div>
+                        <div class="question-message"></div>
+                    </div>
+
+                    <div class="question" data-question-id="Survey102">
+                        <h3>2. As áreas em verde na imagem provavelmente indicam:</h3>
+                        <div class="options">
+                            <div class="option">
+                                <input type="radio" id="i002_opt1" name="Survey102" value="Áreas com alta atividade">
+                                <label for="i002_opt1">Áreas com alta atividade</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="i002_opt2" name="Survey102" value="Áreas com baixa ou nenhuma atividade">
+                                <label for="i002_opt2">Áreas com baixa ou nenhuma atividade</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="i002_opt3" name="Survey102" value="Cor de contraste sem significado">
+                                <label for="i002_opt3">Cor de contraste sem significado</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="i002_opt4" name="Survey102" value="Cidades populosas">
+                                <label for="i002_opt4">Cidades populosas</label>
+                            </div>
+                        </div>
+                        <div class="question-message"></div>
+                    </div>
+
+                    <div class="question" data-question-id="Survey103">
+                        <h3>3. Que país da América do Sul parece ter a maior área coberta por 'pontos quentes'?</h3>
+                        <div class="options">
+                            <div class="option">
+                                <input type="radio" id="i003_opt1" name="Survey103" value="Argentina">
+                                <label for="i003_opt1">Argentina</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="i003_opt2" name="Survey103" value="Chile">
+                                <label for="i003_opt2">Chile</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="i003_opt3" name="Survey103" value="Brasil">
+                                <label for="i003_opt3">Brasil</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="i003_opt4" name="Survey103" value="Colômbia">
+                                <label for="i003_opt4">Colômbia</label>
+                            </div>
+                        </div>
+                        <div class="question-message"></div>
+                    </div>
+
+                    <div class="question" data-question-id="Survey104">
+                        <h3>4. Como você descreveria a distribuição geral dos 'pontos quentes' pela América do Sul?</h3>
+                        <div class="options">
+                            <div class="option">
+                                <input type="radio" id="i004_opt1" name="Survey104" value="Uniforme em todo o continente">
+                                <label for="i04_opt1">Uniforme em todo o continente</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="i004_opt2" name="Survey104" value="Concentrada na porção leste e central">
+                                <label for="i004_opt2">Concentrada na porção leste e central</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="i004_opt3" name="Survey104" value="Mais intensa nas regiões costeiras">
+                                <label for="i004_opt3">Mais intensa nas regiões costeiras</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="i004_opt4" name="Survey104" value="Distribuída principalmente no sul do continente">
+                                <label for="i004_opt4">Distribuída principalmente no sul do continente</label>
+                            </div>
+                        </div>
+                        <div class="question-message"></div>
+                    </div>
+
+                    <div class="question" data-question-id="Survey105">
+                        <h3>5. Baseando-se na imagem, qual seria a provável natureza do fenômeno que o mapa de calor está ilustrando?</h3>
+                        <div class="options">
+                            <div class="option">
+                                <input type="radio" id="i005_opt1" name="Survey105" value="Padrões de migração animal">
+                                <label for="i005_opt1">Padrões de migração animal</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="i005_opt2" name="Survey105" value="Concentração populacional">
+                                <label for="i005_opt2">Concentração populacional</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="i005_opt3" name="Survey105" value="Eventos de desmatamento/incêndios">
+                                <label for="i005_opt3">Eventos de desmatamento/incêndios</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="i005_opt4" name="Survey105" value="Níveis de poluição da água">
+                                <label for="i005_opt4">Níveis de poluição da água</label>
+                            </div>
+                        </div>
+                        <div class="question-message"></div>
+                    </div>
+                    
+                    <div class="navigation-buttons">
+                        <button type="button" id="prev-button">Anterior</button>
+                        <button type="button" id="next-button">Próxima</button>
+                    </div>
+
+                    <div class="submit-container">
+                        <button type="submit" id="submit-button">Concluir esta Pesquisa</button>
+                    </div>
+                    <div id="message" class="message"></div>
+                </form>
+            </div>
         </div>
-        
-        <form id="survey1-form">
-            <div class="question active" data-question-id="I001">
-                <h3>1. Qual a região com a maior concentração de 'pontos quentes' (áreas vermelhas) na imagem?</h3>
-                <div class="options">
-                    <div class="option">
-                        <input type="radio" id="i001_opt1" name="I001" value="Norte da América do Sul (Amazônia)">
-                        <label for="i001_opt1">Norte da América do Sul (Amazônia)</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="i001_opt2" name="I001" value="Região Andina">
-                        <label for="i001_opt2">Região Andina</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="i001_opt3" name="I001" value="Sul do Brasil e países vizinhos">
-                        <label for="i001_opt3">Sul do Brasil e países vizinhos</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="i001_opt4" name="I001" value="Litoral Atlântico">
-                        <label for="i001_opt4">Litoral Atlântico</label>
-                    </div>
-                </div>
-                <div class="question-message"></div>
-            </div>
-
-            <div class="question" data-question-id="I002">
-                <h3>2. As áreas em verde na imagem provavelmente indicam:</h3>
-                <div class="options">
-                    <div class="option">
-                        <input type="radio" id="i002_opt1" name="I002" value="Áreas com alta atividade">
-                        <label for="i002_opt1">Áreas com alta atividade</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="i002_opt2" name="I002" value="Áreas com baixa ou nenhuma atividade">
-                        <label for="i002_opt2">Áreas com baixa ou nenhuma atividade</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="i002_opt3" name="I002" value="Cor de contraste sem significado">
-                        <label for="i002_opt3">Cor de contraste sem significado</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="i002_opt4" name="I002" value="Cidades populosas">
-                        <label for="i002_opt4">Cidades populosas</label>
-                    </div>
-                </div>
-                <div class="question-message"></div>
-            </div>
-
-            <div class="question" data-question-id="I003">
-                <h3>3. Que país da América do Sul parece ter a maior área coberta por 'pontos quentes'?</h3>
-                <div class="options">
-                    <div class="option">
-                        <input type="radio" id="i003_opt1" name="I003" value="Argentina">
-                        <label for="i003_opt1">Argentina</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="i003_opt2" name="I003" value="Chile">
-                        <label for="i003_opt2">Chile</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="i003_opt3" name="I003" value="Brasil">
-                        <label for="i003_opt3">Brasil</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="i003_opt4" name="I003" value="Colômbia">
-                        <label for="i003_opt4">Colômbia</label>
-                    </div>
-                </div>
-                <div class="question-message"></div>
-            </div>
-
-            <div class="question" data-question-id="I004">
-                <h3>4. Como você descreveria a distribuição geral dos 'pontos quentes' pela América do Sul?</h3>
-                <div class="options">
-                    <div class="option">
-                        <input type="radio" id="i004_opt1" name="I004" value="Uniforme em todo o continente">
-                        <label for="i004_opt1">Uniforme em todo o continente</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="i004_opt2" name="I004" value="Concentrada na porção leste e central">
-                        <label for="i004_opt2">Concentrada na porção leste e central</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="i004_opt3" name="I004" value="Mais intensa nas regiões costeiras">
-                        <label for="i004_opt3">Mais intensa nas regiões costeiras</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="i004_opt4" name="I004" value="Distribuída principalmente no sul do continente">
-                        <label for="i004_opt4">Distribuída principalmente no sul do continente</label>
-                    </div>
-                </div>
-                <div class="question-message"></div>
-            </div>
-
-            <div class="question" data-question-id="I005">
-                <h3>5. Baseando-se na imagem, qual seria a provável natureza do fenômeno que o mapa de calor está ilustrando?</h3>
-                <div class="options">
-                    <div class="option">
-                        <input type="radio" id="i005_opt1" name="I005" value="Padrões de migração animal">
-                        <label for="i005_opt1">Padrões de migração animal</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="i005_opt2" name="I005" value="Concentração populacional">
-                        <label for="i005_opt2">Concentração populacional</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="i005_opt3" name="I005" value="Eventos de desmatamento/incêndios">
-                        <label for="i005_opt3">Eventos de desmatamento/incêndios</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="i005_opt4" name="I005" value="Níveis de poluição da água">
-                        <label for="i005_opt4">Níveis de poluição da água</label>
-                    </div>
-                </div>
-                <div class="question-message"></div>
-            </div>
-            
-            <div class="navigation-buttons">
-                <button type="button" id="prev-button" style="display:none;">Anterior</button>
-                <button type="button" id="next-button">Próxima</button>
-            </div>
-
-            <div class="submit-container">
-                <button type="submit" id="submit-button" style="display:none;">Concluir esta Pesquisa</button>
-            </div>
-            <div id="message" class="message" style="display:none;"></div>
-        </form>
         <div id="progress-container">
             <p>Questão <span id="current-question">1</span> de <span id="total-questions">X</span></p>
+            <div class="progress-bar-container">
+                <div class="progress-bar"></div>
+            </div>
         </div>
     </div>
     <div id="loading-overlay" class="loading-overlay">
-    <div class="loading-message">
-        <div class="spinner"></div>
-        <p>Enviando suas respostas...</p>
+        <div class="loading-message">
+            <div class="spinner"></div>
+            <p>Enviando suas respostas...</p>
+        </div>
     </div>
-    </div>
-    <script src="survey1.js"></script>
+    <script src="main.js"></script>
 </body>
 </html>

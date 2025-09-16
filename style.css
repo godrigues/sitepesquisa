@@ -7,7 +7,7 @@
 
 body {
     font-family: 'Arial', sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #E9ECEF; /* Fundo cinza claro */
     min-height: 100vh;
     display: flex;
     align-items: center;
@@ -18,14 +18,14 @@ body {
     background: white;
     padding: 2rem;
     border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Sombra mais suave */
     text-align: center;
     max-width: 400px;
     width: 90%;
 }
 
 h1 {
-    color: #333;
+    color: #004085; /* Azul escuro, cor institucional */
     margin-bottom: 2rem;
     font-size: 1.8rem;
 }
@@ -38,35 +38,36 @@ form {
 
 label {
     font-weight: bold;
-    color: #555;
+    color: #343A40; /* Cinza escuro */
     text-align: left;
 }
 
-input[type="text"] {
+input[type="text"], input[type="number"], select, textarea {
     padding: 1rem;
-    border: 2px solid #ddd;
+    border: 1px solid #CED4DA; /* Borda mais suave */
     border-radius: 8px;
     font-size: 1rem;
     transition: border-color 0.3s ease;
 }
 
-input[type="text"]:focus {
+input[type="text"]:focus, input[type="number"]:focus, select:focus, textarea:focus {
     outline: none;
-    border-color: #667eea;
+    border-color: #007BFF; /* Destaque azul */
 }
 
 button {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #007BFF; /* Azul institucional */
     color: white;
     padding: 1rem 2rem;
     border: none;
     border-radius: 8px;
     font-size: 1.1rem;
     cursor: pointer;
-    transition: transform 0.2s ease;
+    transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
 button:hover {
+    background: #0056B3; /* Tom de azul mais escuro */
     transform: translateY(-2px);
 }
 
@@ -76,12 +77,29 @@ button:active {
 
 /* Estilos para a página de pesquisa */
 .survey-container {
-    max-width: 800px;
+    max-width: 1200px;
     width: 95%;
     background: white;
     padding: 2rem;
     border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    text-align: left;
+}
+
+/* Novo estilo para o container de duas colunas */
+.main-content-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.media-column {
+    flex-basis: 50%;
+}
+
+.form-column {
+    flex-basis: 50%;
 }
 
 .image-container {
@@ -99,12 +117,11 @@ button:active {
 .question {
     margin-bottom: 2rem;
     padding: 1.5rem;
-    background: #f8f9fa;
+    background: #F8F9FA; /* Fundo de pergunta mais claro */
     border-radius: 10px;
-    border-left: 4px solid #667eea;
+    border-left: 4px solid #007BFF; /* Borda de destaque azul */
 }
 
-/* Oculta todas as perguntas por padrão, mostrando apenas a 'active' */
 .question {
     display: none;
 }
@@ -133,12 +150,13 @@ button:active {
     margin: 0;
     cursor: pointer;
     font-weight: normal;
+    color: #343A40;
 }
 
 textarea {
     width: 100%;
     padding: 1rem;
-    border: 2px solid #ddd;
+    border: 1px solid #CED4DA;
     border-radius: 8px;
     font-size: 1rem;
     font-family: inherit;
@@ -148,7 +166,7 @@ textarea {
 
 textarea:focus {
     outline: none;
-    border-color: #667eea;
+    border-color: #007BFF;
 }
 
 .submit-container {
@@ -164,15 +182,15 @@ textarea:focus {
 }
 
 .message.success {
-    background: #d4edda;
+    background: #D4EDDA;
     color: #155724;
-    border: 1px solid #c3e6cb;
+    border: 1px solid #C3E6CB;
 }
 
 .message.error {
-    background: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
+    background: #F8D7DA;
+    color: #721C24;
+    border: 1px solid #F5C6CB;
 }
 
 /* Responsividade */
@@ -188,13 +206,22 @@ textarea:focus {
     .question h3 {
         font-size: 1rem;
     }
+
+    .main-content-container {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .media-column, .form-column {
+        flex-basis: auto;
+    }
 }
 
 /* Estilos para o vídeo responsivo */
 .video-container {
     position: relative;
     width: 100%;
-    padding-bottom: 56.25%; /* Proporção 16:9 (altura / largura) */
+    padding-bottom: 56.25%;
     height: 0;
     overflow: hidden;
     margin-bottom: 2rem;
@@ -259,7 +286,7 @@ textarea:focus {
 
 .spinner {
     border: 4px solid rgba(0, 0, 0, 0.1);
-    border-left-color: #667eea;
+    border-left-color: #007BFF;
     border-radius: 50%;
     width: 40px;
     height: 40px;
@@ -278,7 +305,7 @@ textarea:focus {
     margin-top: 1rem;
     border-radius: 5px;
     color: #fff;
-    background-color: #d9534f;
+    background-color: #DC3545;
     text-align: center;
     font-size: 0.9rem;
     opacity: 0;
@@ -289,4 +316,79 @@ textarea:focus {
 .question-message.visible {
     opacity: 1;
     visibility: visible;
+}
+
+/* Estilos para o Termo */
+.accordion-item {
+    border: 1px solid #CED4DA;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    overflow: hidden;
+}
+
+.accordion-title {
+    background-color: #F8F9FA;
+    color: #343A40;
+    padding: 1rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.3s ease;
+}
+
+.accordion-title:hover {
+    background-color: #E9ECEF;
+}
+
+/* Esconde o conteúdo por padrão */
+.accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    padding: 0 1rem;
+    transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+}
+
+
+.accordion-content.active {
+    max-height: 600px;
+    padding: 1rem;
+}
+
+
+.accordion-icon {
+    font-size: 1.5rem;
+    font-weight: bold;
+    line-height: 1;
+    margin-left: 1rem;
+    transition: transform 0.3s ease;
+}
+
+.accordion-title.active .accordion-icon {
+    transform: rotate(45deg);
+}
+
+/* Adiciona a rolagem para o conteúdo do termo de consentimento em telas menores */
+.scrollable-content {
+    max-height: 40vh; 
+    overflow-y: auto; 
+    padding-right: 1rem; 
+}
+
+/* Estilos para a Barra de Progresso */
+.progress-bar-container {
+    width: 100%;
+    background-color: #E9ECEF;
+    border-radius: 10px;
+    height: 10px;
+    margin-top: 1rem;
+    overflow: hidden; /* Garante que a barra interna não ultrapasse o contêiner */
+}
+
+.progress-bar {
+    height: 100%;
+    background-color: #007BFF; /* Azul de destaque */
+    width: 0%;
+    border-radius: 10px;
+    transition: width 0.3s ease-in-out;
 }

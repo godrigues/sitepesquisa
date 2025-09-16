@@ -9,132 +9,143 @@
 <body>
     <div class="container survey-container">
         <h1>Pesquisa de Imagens/Vídeos</h1>
-        <div class="image-container">
-            <img src="midia/map.jpg" alt="Imagem da Pesquisa" class="survey-image">
+        
+        <div class="main-content-container">
+            <div class="media-column">
+                <div class="image-container">
+                    <img src="midia/map.jpg" alt="Imagem da Pesquisa" class="survey-image">
+                </div>
+            </div>
+
+            <div class="form-column">
+                <form id="survey-form">
+                    <div class="question active" data-question-id="Survey001">
+                        <h3>1. Qual a cor predominante na área central da imagem?</h3>
+                        <div class="options">
+                            <div class="option">
+                                <input type="radio" id="q001_opt1" name="Survey001" value="Vermelho">
+                                <label for="q001_opt1">Vermelho</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="q001_opt2" name="Survey001" value="Verde">
+                                <label for="q001_opt2">Verde</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="q001_opt3" name="Survey001" value="Azul">
+                                <label for="q001_opt3">Azul</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="q001_opt4" name="Survey001" value="Amarelo">
+                                <label for="q001_opt4">Amarelo</label>
+                            </div>
+                        </div>
+                        <div class="question-message"></div>
+                    </div>
+        
+                    <div class="question" data-question-id="Survey002">
+                        <h3>2. Quantos 'focos' de calor (áreas mais avermelhadas) você consegue identificar?</h3>
+                        <div class="options">
+                            <div class="option">
+                                <input type="radio" id="q002_opt1" name="Survey002" value="1">
+                                <label for="q002_opt1">1</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="q002_opt2" name="Survey002" value="2">
+                                <label for="q002_opt2">2</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="q002_opt3" name="Survey002" value="3">
+                                <label for="q002_opt3">3</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="q002_opt4" name="Survey002" value="4">
+                                <label for="q002_opt4">4</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="q002_opt5" name="Survey002" value="Mais de 4">
+                                <label for="q002_opt5">Mais de 4</label>
+                            </div>
+                        </div>
+                        <div class="question-message"></div>
+                    </div>
+        
+                    <div class="question" data-question-id="Survey003">
+                        <h3>3. A imagem representa um mapa de calor. Qual seria a interpretação de uma área em azul claro?</h3>
+                        <div class="options">
+                            <div class="option">
+                                <input type="radio" id="q003_opt1" name="Survey003" value="Alta intensidade">
+                                <label for="q003_opt1">Alta intensidade</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="q003_opt2" name="Survey003" value="Baixa intensidade">
+                                <label for="q003_opt2">Baixa intensidade</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="q003_opt3" name="Survey003" value="Temperatura média">
+                                <label for="q003_opt3">Temperatura média</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="q003_opt4" name="Survey003" value="Dados ausentes">
+                                <label for="q003_opt4">Dados ausentes</label>
+                            </div>
+                        </div>
+                        <div class="question-message"></div>
+                    </div>
+        
+                    <div class="question" data-question-id="Survey004">
+                        <h3>4. Descreva em poucas palavras o que a imagem sugere a você.</h3>
+                        <textarea id="q004_text" name="Survey004"></textarea>
+                        <div class="question-message"></div>
+                    </div>
+        
+                    <div class="question" data-question-id="Survey005">
+                        <h3>5. Qual das áreas (esquerda, centro, direita) parece ter a maior concentração de 'calor'?</h3>
+                        <div class="options">
+                            <div class="option">
+                                <input type="radio" id="q005_opt1" name="Survey005" value="Esquerda">
+                                <label for="q005_opt1">Esquerda</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="q005_opt2" name="Survey005" value="Centro">
+                                <label for="q005_opt2">Centro</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="q005_opt3" name="Survey005" value="Direita">
+                                <label for="q005_opt3">Direita</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="q005_opt4" name="Survey005" value="Todas iguais">
+                                <label for="q005_opt4">Todas iguais</label>
+                            </div>
+                        </div>
+                        <div class="question-message"></div>
+                    </div>
+        
+                    <div class="navigation-buttons">
+                        <button type="button" id="prev-button">Anterior</button>
+                        <button type="button" id="next-button">Próxima</button>
+                    </div>
+        
+                    <div class="submit-container">
+                        <button type="submit" id="submit-button">Enviar Respostas</button>
+                    </div>
+                    <div id="message" class="message"></div>
+                </form>
+            </div>
         </div>
-        <form id="survey-form">
-            <div class="question active" data-question-id="Q001">
-                <h3>1. Qual a cor predominante na área central da imagem?</h3>
-                <div class="options">
-                    <div class="option">
-                        <input type="radio" id="q001_opt1" name="Q001" value="Vermelho">
-                        <label for="q001_opt1">Vermelho</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q001_opt2" name="Q001" value="Verde">
-                        <label for="q001_opt2">Verde</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q001_opt3" name="Q001" value="Azul">
-                        <label for="q001_opt3">Azul</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q001_opt4" name="Q001" value="Amarelo">
-                        <label for="q001_opt4">Amarelo</label>
-                    </div>
-                </div>
-                <div class="question-message"></div>
-            </div>
-
-            <div class="question" data-question-id="Q002">
-                <h3>2. Quantos 'focos' de calor (áreas mais avermelhadas) você consegue identificar?</h3>
-                <div class="options">
-                    <div class="option">
-                        <input type="radio" id="q002_opt1" name="Q002" value="1">
-                        <label for="q002_opt1">1</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q002_opt2" name="Q002" value="2">
-                        <label for="q002_opt2">2</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q002_opt3" name="Q002" value="3">
-                        <label for="q002_opt3">3</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q002_opt4" name="Q002" value="4">
-                        <label for="q002_opt4">4</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q002_opt5" name="Q002" value="Mais de 4">
-                        <label for="q002_opt5">Mais de 4</label>
-                    </div>
-                </div>
-                <div class="question-message"></div>
-            </div>
-
-            <div class="question" data-question-id="Q003">
-                <h3>3. A imagem representa um mapa de calor. Qual seria a interpretação de uma área em azul claro?</h3>
-                <div class="options">
-                    <div class="option">
-                        <input type="radio" id="q003_opt1" name="Q003" value="Alta intensidade">
-                        <label for="q003_opt1">Alta intensidade</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q003_opt2" name="Q003" value="Baixa intensidade">
-                        <label for="q003_opt2">Baixa intensidade</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q003_opt3" name="Q003" value="Temperatura média">
-                        <label for="q003_opt3">Temperatura média</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q003_opt4" name="Q003" value="Dados ausentes">
-                        <label for="q003_opt4">Dados ausentes</label>
-                    </div>
-                </div>
-                <div class="question-message"></div>
-            </div>
-
-            <div class="question" data-question-id="Q004">
-                <h3>4. Descreva em poucas palavras o que a imagem sugere a você.</h3>
-                <textarea id="q004_text" name="Q004"></textarea>
-                <div class="question-message"></div>
-            </div>
-
-            <div class="question" data-question-id="Q005">
-                <h3>5. Qual das áreas (esquerda, centro, direita) parece ter a maior concentração de 'calor'?</h3>
-                <div class="options">
-                    <div class="option">
-                        <input type="radio" id="q005_opt1" name="Q005" value="Esquerda">
-                        <label for="q005_opt1">Esquerda</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q005_opt2" name="Q005" value="Centro">
-                        <label for="q005_opt2">Centro</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q005_opt3" name="Q005" value="Direita">
-                        <label for="q005_opt3">Direita</label>
-                    </div>
-                    <div class="option">
-                        <input type="radio" id="q005_opt4" name="Q005" value="Todas iguais">
-                        <label for="q005_opt4">Todas iguais</label>
-                    </div>
-                </div>
-                <div class="question-message"></div>
-            </div>
-
-            <div class="navigation-buttons">
-                <button type="button" id="prev-button">Anterior</button>
-                <button type="button" id="next-button">Próxima</button>
-            </div>
-
-            <div class="submit-container">
-                <button type="submit" id="submit-button">Enviar Respostas</button>
-            </div>
-            <div id="message" class="message"></div>
-        </form>
         <div id="progress-container">
             <p>Questão <span id="current-question">1</span> de <span id="total-questions">X</span></p>
+            <div class="progress-bar-container">
+                <div class="progress-bar"></div>
+            </div>
         </div>
     </div>
     <div id="loading-overlay" class="loading-overlay">
-    <div class="loading-message">
-        <div class="spinner"></div>
-        <p>Enviando suas respostas...</p>
+        <div class="loading-message">
+            <div class="spinner"></div>
+            <p>Enviando suas respostas...</p>
+        </div>
     </div>
-    </div>
-    <script src="survey.js"></script>
+    <script src="main.js"></script>
 </body>
 </html>

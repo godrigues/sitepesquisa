@@ -1,5 +1,3 @@
-// tutorial.js
-// Script para a página de tutorial
 document.addEventListener("DOMContentLoaded", function() {
     const tutorialForm = document.getElementById("tutorial-form");
     const questions = document.querySelectorAll(".question[data-question-id]");
@@ -9,7 +7,11 @@ document.addEventListener("DOMContentLoaded", function() {
     const totalQuestions = questions.length;
     let currentQuestionIndex = 0;
     
+    // Variável para armazenar o tempo de início de cada pergunta
+    let questionStartTime = 0;
+
     const pageAnswers = [];
+    const loadingOverlay = document.getElementById("loading-overlay");
 
     function validateAnswer() {
         const currentQuestionDiv = questions[currentQuestionIndex];
@@ -44,6 +46,12 @@ document.addEventListener("DOMContentLoaded", function() {
             currentQuestionSpan.textContent = (currentQuestionIndex + 1);
             totalQuestionsSpan.textContent = totalQuestions;
         }
+        
+        const progressBar = document.querySelector(".progress-bar");
+        if (progressBar) {
+            const progressPercentage = ((currentQuestionIndex + 1) / totalQuestions) * 100;
+            progressBar.style.width = progressPercentage + "%";
+        }
     }
 
     function showQuestion(index) {
@@ -51,6 +59,8 @@ document.addEventListener("DOMContentLoaded", function() {
             q.classList.remove('active');
         });
         questions[index].classList.add('active');
+        
+        questionStartTime = new Date().getTime();
         
         prevButton.style.display = 'none';
         nextButton.style.display = index === totalQuestions - 1 ? 'none' : 'block';
@@ -70,11 +80,14 @@ document.addEventListener("DOMContentLoaded", function() {
         } else if (currentQuestionDiv.querySelector("textarea")) {
             answer = currentQuestionDiv.querySelector("textarea").value.trim();
         }
+        
+        const responseTime = new Date().getTime() - questionStartTime;
 
         pageAnswers[currentQuestionIndex] = {
             questionId: questionId,
             answer: answer,
-            timestamp: new Date().toISOString()
+            timestamp: new Date().toISOString(),
+            responseTime: responseTime
         };
     }
     
@@ -96,7 +109,7 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         });
         
-        submitButton.addEventListener("click", function(e) {
+        submitButton.addEventListener("click", async function(e) {
             e.preventDefault();
             
             if (!validateAnswer()) {
@@ -104,10 +117,59 @@ document.addEventListener("DOMContentLoaded", function() {
             }
 
             collectAnswer();
-
+            
+            // Salva as respostas do tutorial para a próxima página
             localStorage.setItem("tutorialAnswers", JSON.stringify(pageAnswers));
             
-            window.location.href = 'start_real_survey.html';
+            // Inicia a lógica para buscar a próxima pesquisa
+            const gasUrl = 'https://script.google.com/macros/s/AKfycbx_BSeYfATPGj4lzJImTnB8oyXCFRkznmfaHEbN7OscX-xEpfXG_9Vk8cz98USiD24SjA/exec';
+            
+            loadingOverlay.classList.add("visible");
+            submitButton.disabled = true;
+
+            const postData = { action: 'getNextSurvey' };
+            const formData = new FormData();
+            formData.append('data', JSON.stringify(postData));
+
+            try {
+                // Tenta a requisição POST para obter a próxima pesquisa
+                await fetch(gasUrl, {
+                    method: 'POST',
+                    body: formData,
+                });
+                
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                
+                // Tenta a requisição GET para obter o resultado
+                const getResponse = await fetch(gasUrl + '?action=getNextSurvey', {
+                    method: 'GET',
+                });
+                
+                if (getResponse.ok) {
+                    const result = await getResponse.json();
+                    if (result.nextSurvey) {
+                        localStorage.setItem('selectedSurvey', result.nextSurvey);
+                        window.location.href = result.nextSurvey;
+                    } else {
+                        throw new Error('Resposta inválida do servidor');
+                    }
+                } else {
+                    throw new Error('Erro na resposta do servidor');
+                }
+                
+            } catch (error) {
+                console.error('Erro ao conectar ao servidor:', error);
+                
+                // Fallback: seleciona uma pesquisa aleatória se houver erro
+                const surveyPages = ['survey.html', 'survey1.html', 'survey2.html'];
+                const randomSurvey = surveyPages[Math.floor(Math.random() * surveyPages.length)];
+                localStorage.setItem('selectedSurvey', randomSurvey);
+                window.location.href = randomSurvey;
+                
+            } finally {
+                loadingOverlay.classList.remove("visible");
+                submitButton.disabled = false;
+            }
         });
     }
 });
