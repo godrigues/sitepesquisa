@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Preview Sincronizado - Grid + Projeção 1D</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .preview-container {
+      display: flex;
+      gap: 2rem;
+      align-items: flex-start;
+      max-width: 100%;
+      padding: 2rem;
+    }
+    .preview-grid,
+    .preview-proj,
+    .preview-proj-comparison {
+      flex: 1;
+      min-width: 0;
+    }
+    .preview-controls {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+      background: #F8F9FA;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+    .preview-controls button {
+      padding: 0.5rem 1rem;
+      font-size: 0.9rem;
+    }
+    .preview-controls input[type="range"] {
+      flex: 1;
+      min-width: 200px;
+    }
+    .preview-controls span {
+      font-size: 0.9rem;
+      color: #343A40;
+      min-width: 90px;
+    }
+    .curve-toggle, .mode-toggle {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      margin-left: auto;
+    }
+    .curve-toggle button, .mode-toggle button {
+      padding: 0.4rem 0.8rem;
+      font-size: 0.85rem;
+    }
+    .curve-toggle button.active, .mode-toggle button.active {
+      background: #007BFF;
+      color: white;
+    }
+    .d3-tooltip {
+      position: absolute;
+      padding: 8px 12px;
+      background: rgba(0, 0, 0, 0.9);
+      color: white;
+      border-radius: 4px;
+      font-size: 12px;
+      line-height: 1.4;
+      pointer-events: none;
+      z-index: 1000;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .d3-tooltip.visible { opacity: 1; }
+    .hidden { display: none !important; }
+    .legend-ori {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+      margin-bottom: 28px;
+      margin-top: 2px;
+      flex-wrap: wrap;
+    }
+    .legend-ori span.box {
+      display:inline-block;
+      width:32px;
+      height:14px;
+      border-radius:2px;
+      margin-right:4px;
+      vertical-align:middle;
+    }
+    @media (max-width: 900px) {
+      .preview-container { flex-direction: column; }
+      .curve-toggle, .mode-toggle { margin-left: 0; width: 100%; }
+      .legend-ori { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="container">
+      <h1>Preview Sincronizado - Grid Animado + Projeção 1D</h1>
+      <div class="legend-ori">
+        <div>
+          <span class="box" style="background:#0080ff"></span>
+          Norte (N)
+        </div>
+        <div>
+          <span class="box" style="background:#ff4d33"></span>
+          Sul (S)
+        </div>
+        <div>
+          <span class="box" style="background:#00cc44"></span>
+          Oeste (O)
+        </div>
+        <div>
+          <span class="box" style="background:#b266ff"></span>
+          Leste (L)
+        </div>
+        <div style="margin-left:16px;">
+          <span style="font-size:19px;font-weight:bold;">N</span>
+          <span style="margin-left:25px;font-size:19px;font-weight:bold;">S</span>
+          <span style="margin-left:25px;font-size:19px;font-weight:bold;">O</span>
+          <span style="margin-left:25px;font-size:19px;font-weight:bold;">L</span>
+          <span style="color:#777;font-size:15px;margin-left:8px;">(letras nos cantos do grid)</span>
+        </div>
+      </div>
+
+      <div class="preview-controls">
+        <button id="btnPlayPreview" type="button" class="btn-primary">Play</button>
+        <input id="seekPreview" type="range" min="0" max="100" value="0" aria-label="Tempo">
+        <span id="timePreview">00:00 / 00:10</span>
+        <div class="mode-toggle">
+          <span>Modo:</span>
+          <button id="btnModeGrid" type="button" class="btn-secondary active">Grid + Projeção</button>
+          <button id="btnModeComparison" type="button" class="btn-secondary">Comparação</button>
+        </div>
+        <div id="curveToggleContainer" class="curve-toggle">
+          <span>Curva:</span>
+          <button id="btnMorton" type="button" class="btn-secondary active">Morton</button>
+          <button id="btnHilbert" type="button" class="btn-secondary">Hilbert</button>
+        </div>
+      </div>
+
+      <div class="preview-container">
+        <div id="gridContainer" class="preview-grid">
+          <h2>Grid Espacial</h2>
+          <svg id="gridSvg" class="survey-video" preserveAspectRatio="xMidYMid meet"></svg>
+        </div>
+
+        <div id="projContainer" class="preview-proj">
+          <h2>Projeção 1D (<span id="curveType">Morton</span>)</h2>
+          <svg id="projSvg" class="survey-video" preserveAspectRatio="xMidYMid meet"></svg>
+        </div>
+
+        <div id="mortonContainer" class="preview-proj-comparison hidden">
+          <h2>Projeção 1D (Morton)</h2>
+          <svg id="mortonSvg" class="survey-video" preserveAspectRatio="xMidYMid meet"></svg>
+        </div>
+        <div id="hilbertContainer" class="preview-proj-comparison hidden">
+          <h2>Projeção 1D (Hilbert)</h2>
+          <svg id="hilbertSvg" class="survey-video" preserveAspectRatio="xMidYMid meet"></svg>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div id="tooltip" class="d3-tooltip"></div>
+  <script src="https://unpkg.com/d3@7/dist/d3.min.js"></script>
+  <script src="https://unpkg.com/d3-hilbert"></script>
+  <script src="preview.js"></script>
+</body>
+</html>
