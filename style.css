@@ -1,31 +1,49 @@
-/* Reset básico */
+/* Reset básico V1 */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-body {
-    font-family: 'Arial', sans-serif;
-    background: #E9ECEF; /* Fundo cinza claro */
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+html, body {
+    height: 100%;
+    margin: 0;
 }
 
+body {
+    font-family: 'Arial', sans-serif;
+    background: #E9ECEF;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Removido justify-content para evitar que o conteúdo suma */
+main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Alinhamento ao topo */
+    align-items: center;
+    width: 100%;
+}
+
+/* Cor de fundo e bordas ajustadas */
 .container {
-    background: white;
+    background: #E9ECEF;
     padding: 2rem;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Sombra mais suave */
-    text-align: center;
-    max-width: 400px;
-    width: 90%;
+    border-radius: 0;
+    box-shadow: none;
+    width: 100%;
+    height: auto;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
 }
 
 h1 {
-    color: #004085; /* Azul escuro, cor institucional */
+    color: #004085;
     margin-bottom: 2rem;
     font-size: 1.8rem;
 }
@@ -38,13 +56,13 @@ form {
 
 label {
     font-weight: bold;
-    color: #343A40; /* Cinza escuro */
+    color: #343A40;
     text-align: left;
 }
 
 input[type="text"], input[type="number"], select, textarea {
     padding: 1rem;
-    border: 1px solid #CED4DA; /* Borda mais suave */
+    border: 1px solid #CED4DA;
     border-radius: 8px;
     font-size: 1rem;
     transition: border-color 0.3s ease;
@@ -52,11 +70,11 @@ input[type="text"], input[type="number"], select, textarea {
 
 input[type="text"]:focus, input[type="number"]:focus, select:focus, textarea:focus {
     outline: none;
-    border-color: #007BFF; /* Destaque azul */
+    border-color: #007BFF;
 }
 
 button {
-    background: #007BFF; /* Azul institucional */
+    background: #007BFF;
     color: white;
     padding: 1rem 2rem;
     border: none;
@@ -64,10 +82,11 @@ button {
     font-size: 1.1rem;
     cursor: pointer;
     transition: background-color 0.2s ease, transform 0.2s ease;
+    text-align: center;
 }
 
 button:hover {
-    background: #0056B3; /* Tom de azul mais escuro */
+    background: #0056B3;
     transform: translateY(-2px);
 }
 
@@ -75,32 +94,39 @@ button:active {
     transform: translateY(0);
 }
 
-/* Estilos para a página de pesquisa */
+/* Cor de fundo e bordas ajustadas */
 .survey-container {
-    max-width: 1200px;
-    width: 95%;
-    background: white;
+    background: #E9ECEF;
     padding: 2rem;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    border-radius: 0;
+    box-shadow: none;
+    width: 100%;
+    height: auto;
     text-align: left;
+    margin: 0 auto;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
-/* Novo estilo para o container de duas colunas */
 .main-content-container {
     display: flex;
     justify-content: space-between;
     gap: 2rem;
     margin-top: 2rem;
+    max-height: 70vh; /* Altura fixa para o contêiner de conteúdo principal */
 }
 
 .media-column {
-    flex-basis: 50%;
+    flex-basis: 75%;
+    flex-grow: 0;
+    flex-shrink: 0;
+    height: 100%;
 }
 
 .form-column {
-    flex-basis: 50%;
-}
+        overflow-y: visible;
+    }
 
 .image-container {
     text-align: center;
@@ -108,18 +134,22 @@ button:active {
 }
 
 .survey-image {
-    max-width: 100%;
+    width: 100%;
     height: auto;
     border-radius: 10px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    object-fit: contain;
 }
 
 .question {
     margin-bottom: 2rem;
     padding: 1.5rem;
-    background: #F8F9FA; /* Fundo de pergunta mais claro */
+    background: #F8F9FA;
     border-radius: 10px;
-    border-left: 4px solid #007BFF; /* Borda de destaque azul */
+    border-left: 4px solid #007BFF;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 .question {
@@ -210,6 +240,7 @@ textarea:focus {
     .main-content-container {
         flex-direction: column;
         gap: 0;
+        padding: 0 1.5rem;
     }
 
     .media-column, .form-column {
@@ -218,27 +249,46 @@ textarea:focus {
 }
 
 /* Estilos para o vídeo responsivo */
+/* Aspecto dinâmico do container do mapa (sem sobras) */
+/* Container do mapa encolhe ao conteúdo e tem só alguns px de folga */
 .video-container {
-    position: relative;
-    width: 100%;
-    padding-bottom: 56.25%;
-    height: 0;
-    overflow: hidden;
-    margin-bottom: 2rem;
+  display: inline-block;
+  padding: 8px;             /* folga desejada ao redor do <g> */
+  background: transparent;
 }
 
-.video-container iframe,
-.video-container object,
-.video-container embed,
-.video-container video,
+/* O SVG não força 100% — deixa o tamanho vir do JS (width/height em px) */
 .video-container .survey-video {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  display: block;
+  width: auto;              /* não ocupar 100% do container */
+  height: auto;             /* deixa o JS definir */
+  max-width: 100%;          /* ainda respeita limites do layout */
+  max-height: 70vh;         /* evita extrapolar a viewport */
+  overflow: visible;        /* não cortar strokes */
+}
+
+.video-container.proj1d {
+  position: static;
+  padding: 0;
+  height: auto;
+  overflow: visible;
+}
+
+/* Faz o SVG da projeção 1D se comportar como as miniaturas responsivas */
+.video-container.proj1d .survey-video,
+#projSvg {
+  position: static;
+  width: 100% !important;
+  height: auto !important;
+  display: block;
+  object-fit: contain;
+  border-radius: 10px;        /* opcional, mantém seu tema */
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* idem */
+}
+
+/* Garante que a coluna de mídia não estique o container */
+.media-column {
+  align-items: flex-start;  /* se for um flex container */
 }
 
 /* Estilos para os botões de navegação */
@@ -302,7 +352,6 @@ textarea:focus {
 /* Estilo para a mensagem de erro em cada questão */
 .question-message {
     padding: 0.5rem;
-    margin-top: 1rem;
     border-radius: 5px;
     color: #fff;
     background-color: #DC3545;
@@ -318,7 +367,7 @@ textarea:focus {
     visibility: visible;
 }
 
-/* Estilos para o Termo */
+/* Estilos para o Acordeão */
 .accordion-item {
     border: 1px solid #CED4DA;
     border-radius: 8px;
@@ -349,13 +398,13 @@ textarea:focus {
     transition: max-height 0.3s ease-out, padding 0.3s ease-out;
 }
 
-
+/* Mostra o conteúdo quando a classe 'active' é adicionada */
 .accordion-content.active {
     max-height: 600px;
     padding: 1rem;
 }
 
-
+/* Estilo para o ícone de + e - */
 .accordion-icon {
     font-size: 1.5rem;
     font-weight: bold;
@@ -370,25 +419,157 @@ textarea:focus {
 
 /* Adiciona a rolagem para o conteúdo do termo de consentimento em telas menores */
 .scrollable-content {
-    max-height: 40vh; 
-    overflow-y: auto; 
-    padding-right: 1rem; 
+    max-height: 40vh;
+    overflow-y: auto;
+    padding-right: 1rem;
 }
 
-/* Estilos para a Barra de Progresso */
-.progress-bar-container {
+/* --- Estilos do Player de Vídeo Personalizado --- */
+
+/* O contêiner de vídeo precisa de 'position: relative' para
+   conter os controles posicionados absolutamente. 
+   O CSS original .video-container já tem 'position: relative',
+   mas adicionamos 'overflow: hidden' e 'border-radius' para garantir.
+*/
+.video-container {
+    position: relative;
+    overflow: hidden; /* Esconde qualquer coisa que transborde */
+    border-radius: 10px; /* Mantém o arredondamento do seu design original */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Contêiner dos controles */
+.video-controls {
+    position: absolute; /* Posiciona sobre o vídeo */
+    bottom: 0;
+    left: 0;
     width: 100%;
-    background-color: #E9ECEF;
-    border-radius: 10px;
-    height: 10px;
-    margin-top: 1rem;
-    overflow: hidden; /* Garante que a barra interna não ultrapasse o contêiner */
+    background-color: rgba(0, 0, 0, 0.6); /* Fundo escuro semitransparente */
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    
+    /* Animação para aparecer/desaparecer */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
+/* Mostra os controles quando o mouse está sobre o contêiner */
+.video-container:hover .video-controls {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Botão de Play/Pause */
+.control-button {
+    background: none;
+    border: none;
+    padding: 0 8px; /* Espaçamento */
+    margin: 0;
+    cursor: pointer;
+    color: white; /* Cor dos ícones SVG */
+}
+
+.control-button svg {
+    width: 20px; /* Tamanho do ícone */
+    height: 20px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+/* Barra de Progresso (input range) */
 .progress-bar {
-    height: 100%;
-    background-color: #007BFF; /* Azul de destaque */
-    width: 0%;
-    border-radius: 10px;
-    transition: width 0.3s ease-in-out;
+    flex-grow: 1; /* Ocupa o espaço restante */
+    margin: 0 12px;
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 5px;
+    background: #555; /* Cor da barra "vazia" */
+    outline: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+/* Estilo da "bolinha" da barra (Chrome/Safari) */
+.progress-bar::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: #007BFF; /* Cor da bolinha */
+    cursor: pointer;
+}
+
+/* Estilo da "bolinha" (Firefox) */
+.progress-bar::-moz-range-thumb {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: #007BFF;
+    cursor: pointer;
+    border: none;
+}
+
+/* Mostrador de Tempo */
+.time-display {
+    color: white;
+    font-size: 0.9rem;
+    font-family: 'Arial', sans-serif;
+    min-width: 90px; /* Largura mínima para evitar que o layout "pule" */
+    text-align: center;
+}
+
+/* Small multiples (9 imagens em grade 3x3) */
+.small-multiples {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);  /* sempre 3 colunas em telas largas */
+  gap: 12px;
+  margin-top: 12px;
+  width: 100%;
+}
+
+.small-multiple {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.small-multiple svg {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;              /* miniaturas quadradas */
+  background: #FFFFFF;
+  border: 1px solid #DEE2E6;
+  border-radius: 6px;
+}
+
+.small-multiple .caption {
+  font-size: 0.85rem;
+  color: #343A40;
+}
+
+/* Em telas médias, caia para 2 colunas para legibilidade */
+@media (max-width: 900px) {
+  .small-multiples {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Em telas pequenas, caia para 1 coluna */
+@media (max-width: 560px) {
+  .small-multiples {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Projeção 1D responsiva como a imagem */
+#projSvg {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
 }
